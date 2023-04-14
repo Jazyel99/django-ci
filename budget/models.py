@@ -20,6 +20,11 @@ class Project(models.Model):
     total_expense_amount = int(total_expense_amount)
     return self.budget - total_expense_amount
 
+  @property
+  def total_transactions(self):
+    expense_list = Expense.objects.filter(project=self)
+    return len(expense_list)
+
 class Category(models.Model):
   project = models.ForeignKey(Project, on_delete=models.CASCADE)
   name = models.CharField(max_length=50)
