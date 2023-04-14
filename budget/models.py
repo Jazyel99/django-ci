@@ -25,6 +25,9 @@ class Project(models.Model):
     expense_list = Expense.objects.filter(project=self)
     return len(expense_list)
 
+  def get_absolute_url(self):
+    return '/' + self.slug
+
 class Category(models.Model):
   project = models.ForeignKey(Project, on_delete=models.CASCADE)
   name = models.CharField(max_length=50)
