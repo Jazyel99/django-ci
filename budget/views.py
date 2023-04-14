@@ -1,8 +1,8 @@
 import json
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.generic import CreateView
 from budget.forms import ExpenseForm
-
 from budget.models import Category, Expense, Project
 
 def project_list(request):
@@ -49,3 +49,20 @@ def project_detail(request, project_slug):
     return HttpResponse(status=204)
   
   return redirect(project)
+
+class ProjectCreateView(CreateView):
+  model = Project
+  template_name = 'budget/add-project.html'
+  fields = ('name', 'budget')
+
+  def form_valid(self, form):
+    self.object = form.save
+
+    categories = self.request.POST.get('categoriesString').split(',')
+    for category in categories:
+      Category.objects.create(
+        project=Project.objects.get(id=self.object.id),
+        name=category 
+      )
+    
+    return redirect(self.object)
