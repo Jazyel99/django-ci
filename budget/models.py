@@ -9,6 +9,16 @@ class Project(models.Model):
   def save(self,*args, **kwargs):
     self.slug = slugify(self.name)
     super(Project, self).save(*args, **kwargs)
+    
+  @property
+  def budget_left(self):
+    expense_list = Expense.objects.filter(project=self)
+    total_expense_amount = 0
+    for expense in expense_list:
+      total_expense_amount += expense.amount
+    
+    total_expense_amount = int(total_expense_amount)
+    return self.budget - total_expense_amount
 
 class Category(models.Model):
   project = models.ForeignKey(Project, on_delete=models.CASCADE)
