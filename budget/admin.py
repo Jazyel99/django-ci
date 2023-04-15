@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from budget.models import Category, Expense, Project
+
+admin.site.register(Project)
+admin.site.register(Expense)
+admin.site.register(Category)
